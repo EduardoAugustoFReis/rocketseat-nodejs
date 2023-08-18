@@ -1,50 +1,37 @@
-require("express-async-errors"); // necessary to use "new Error"
+require("express-async-errors"); 
 
-const AppError = require("./utils/AppError"); // import class AppError
+const AppError = require("./utils/AppError"); // import class
 
-const express = require("express"); // pega as funcionalidades do express
+const express = require("express"); // import express 
 
 const app = express(); // initialize express
 
-const routes = require("./routes"); // access to routes (index.js)
+app.use(express.json()); // use json format
 
-const migrationsRun = require("./database/sqlite/migrations"); // process of create tables  
+const routes = require("./routes"); // import routes(folder)
 
-migrationsRun(); // run database
+app.use(routes); // use routes
 
-app.use(express.json()); // informa para o insomnia o formato que no caso é json
+const migrationRun = require("./database/sqlite/migrations") // import migration 
 
-app.use(routes); // use resource "routes"
+migrationRun(); // run database  
 
-app.use( ( error,request, response, next ) =>{
+app.use( (error, request, response, next) =>{
 
-  if(error instanceof AppError){ // user error  
-    return response.status(error.statusCode).json({
+  if(error instanceof AppError){ // client error
+    return response.status(error.statusCode).json({ // ex: error.statusCode = 400 
       status: "error",
-      message: error.message
+      message: error.message // message throw new AppError("...") 
     })
   }
 
-  console.error(error);
-
   return response.status(500).json({ // server error
     status: "error",
-    message: "internal server error"
+    message: "Internal server error"
   })
-
 })
 
-const PORT = 3333;  
-app.listen(PORT, ()=>{ // executa funções nessa porta 
-  console.log(`Server is running on ${PORT}`);
+const PORT = 3333;
+app.listen(PORT, ()=>{
+  console.log(`Server is running on Port ${PORT}`);
 })
-
-
-
-/*
-get - read data
-post - create data
-putt - update data
-delete - delete data
-patch - specific update
-*/ 

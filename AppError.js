@@ -1,11 +1,13 @@
-class AppError{
-  message;
-  statusCode;
+class AppError{ // client error (bad request) 
 
-  constructor(message, statusCode = 400){
+  message; // global var
+  statusCode; // global var
+
+  constructor(message, statusCode = 400){ // default 400 (client error)
     this.message = message;
     this.statusCode = statusCode;
   }
+
 }
 
 module.exports = AppError;

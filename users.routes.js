@@ -1,13 +1,12 @@
-// responsibility to know users routes
-const {Router} = require("express"); // import express functions
+const {Router} = require("express"); // import express
 
-const usersRoutes = Router(); // initialize o express
+const UsersController = require("../controllers/usersController"); // import controller
 
-const UsersController = require("../controllers/UsersController"); // import class
+const usersController = new UsersController() // create instance
 
-const usersController = new UsersController(); // create new instance
+const usersRoutes = Router(); // initialize express
 
-usersRoutes.post("/", usersController.create);
-usersRoutes.put("/:id", usersController.update);
+usersRoutes.post("/", usersController.create); // create user
+usersRoutes.put("/:id", usersController.update); // update user
 
 module.exports = usersRoutes;
